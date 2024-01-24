@@ -1,0 +1,274 @@
+//Student Name: Rachel Doogue
+//Student Number: C00237335
+//Discrete Structures Program 1
+
+#include <iostream>
+#include <string>
+
+class node
+{
+public:
+    std::string data;
+    node* next;
+    node(std::string input)
+    {
+        data = input; next = NULL;
+    }
+};
+
+void DeleteFirst(node*);
+node* initialiseAtHead(node*);
+node* addWord(node*);
+node* undo(node*);
+node* lastTypedWord(node*);
+node* update(node*);
+node* size(node*);
+node* isEmpty(node*);
+node* clear(node*);
+node* print(node*);
+node* repeat(node*);
+
+
+int main(int argc, char* argv[])
+{
+    node* current;
+    node* head = NULL;
+    int response = -1;
+
+    head = initialiseAtHead(head);
+
+    while (response != 0)
+    {
+        std::cout << "\n";
+        std::cout << "Press 1 to add most recent typed-in word into the document\n";
+        std::cout << "Press 2 to remove the most recently typed word\n";
+        std::cout << "Press 3 to return the last word that was typed in \n";
+        std::cout << "Press 4 to replaces an existing word with a new word\n";
+        std::cout << "Press 5 to return the number of words entered\n";
+        std::cout << "Press 6 to check if the document is empty\n";
+        std::cout << "Press 7 to remove all the words from the document\n";
+        std::cout << "Press 8 to print all words\n";
+        std::cout << "Press 9 to find the number of times a word repeats\n";
+        std::cout << "Press 10 to exit\n";
+        std::cin >> response;
+        switch (response)
+        {
+        case 1:
+            head = addWord(head);
+            system("CLS");
+            break;
+        case 2:
+            head = undo(head);
+            system("CLS");
+            break;
+        case 3:
+            head = lastTypedWord(head);
+            break;
+        case 4:
+            head = update(head);
+            system("CLS");
+            break;
+        case 5:
+            head = size(head);
+            break;
+        case 6:
+            head = isEmpty(head);
+            break;
+        case 7:
+            head = clear(head);
+            system("CLS");
+            break;
+        case 8:
+            head = print(head);
+            break;
+        case 9:
+            head = repeat(head);
+            break;
+        case 10:
+            std::cout << "\n exit \n ";
+            break;
+        }
+    }
+    return 0;
+}
+
+//Initialise linked list
+node* initialiseAtHead(node* inHead)
+{
+    std::string firstWord;
+    node* new_node;
+
+    std::cout << ("Enter your first word \n");
+    std::cin >> firstWord;
+   
+        new_node = new node(firstWord);
+
+        new_node->next = inHead;
+        inHead = new_node;
+
+    return inHead;
+}
+
+//adds most recent typed word
+node* addWord(node* inHead) 
+{
+    std::string word;
+    node* current;
+    node* new_node;
+    current = inHead;
+    while (current->next != NULL)
+    {
+        current = current->next;
+    }
+    std::cin >> word;
+    new_node = new node(word);
+    current->next = new_node;
+    return inHead;
+}
+
+//removes the most recently typed word
+node* undo(node* inHead)
+{
+    node* second_last = inHead;
+    while (second_last->next->next != NULL)
+    {
+        second_last = second_last->next;
+    }
+
+    delete (second_last->next);
+
+    second_last->next = NULL;
+
+    return inHead;
+}
+
+//returns the last word that was typed in 
+node* lastTypedWord(node* inHead)
+{
+    node* second_last = inHead;
+    while (second_last->next->next != NULL)
+    {
+        second_last = second_last->next;
+    }
+
+    std::cout << "\nLast word typed: "  << (second_last->next->data) << "\n";
+
+    return inHead;
+}
+
+//replaces an existing word with a new word
+node* update(node* inHead) 
+{
+    std::string find;
+    std::string replacement;
+    node* current = inHead;
+    
+    std::cout << "\n What word do you want to replace? \n";
+    std::cin >> find;
+    std::cout << "\n What word do you want to replace it with? \n";
+    std::cin >> replacement;
+
+    while (current->next != NULL)
+    {
+        current = current->next;
+        
+        if (current->data == find)
+        {
+            current->data = replacement;
+        }
+    }
+   
+    return inHead;
+}
+
+//returns the number of words entered
+node* size(node* inHead) // returns the number of words entered
+{
+    node* current = inHead;
+    int count = 0;
+
+    while (current != NULL)
+    {
+        current = current->next;
+        count++;
+    }
+    
+    std::cout << "\nThere are " << count << " words \n";
+
+    return inHead;
+}
+
+//checks if the document is empty
+node* isEmpty(node* inHead)
+{
+    node* current = inHead;
+
+    if (current == NULL)
+    {
+        std::cout << ("\n Empty \n");
+    }
+    else
+    {
+        std::cout << ("\n Is not empty  \n");
+    }
+
+    return inHead;
+}
+
+//removes all the words
+node* clear(node* inHead)
+{
+    node* current = inHead;
+
+    if (current == NULL)
+    {
+        std::cout << ("\n Already clear \n");
+    }
+    else
+    {
+        delete (current);
+        std::cout << ("\n Clear \n");
+    }
+
+    return inHead;
+}
+
+//prints all words
+node* print(node* inHead)
+{
+    node* current = inHead;
+
+    std::cout << ("\n All elements in list  \n");
+    while (current != NULL)
+    {
+        std::cout << current->data;
+        std::cout << (" \n");
+        current = current->next;
+    }
+
+    return inHead;
+}
+
+//counts the number of times a word was repeated
+node* repeat(node* inHead)
+{
+    std::string find;
+    int count = 0;
+    node* current = inHead;
+
+    std::cout << "\n What word do you want to find? \n";
+    std::cin >> find;
+
+    while (current->next != NULL)
+    {
+
+        if (current->data == find)
+        {
+            count++;
+        }
+        current = current->next;
+    }
+    std::cout << "\nThe word " << find << " repeats " << count << " times. \n";
+
+    return inHead;
+}
